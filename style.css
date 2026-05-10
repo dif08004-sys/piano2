@@ -44,6 +44,7 @@ body {
     height: 100%;
     display: none;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .screen.active {
@@ -52,12 +53,14 @@ body {
 
 /* Setup Screen */
 #setup-screen {
-    justify-content: center;
     align-items: center;
     background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
 }
 
 .setup-container {
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     background: rgba(30, 41, 59, 0.8);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -226,6 +229,7 @@ input[type="range"] {
     flex: 1;
     position: relative;
     overflow: hidden;
+    background-color: #ffffff;
 }
 
 #game-canvas {

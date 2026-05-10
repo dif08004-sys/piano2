@@ -23,6 +23,7 @@ let handMode = 'right'; // 'right' or 'both'
 let leftOctave = 3;
 let rightOctave = 4;
 let isSoundEnabled = true;
+let showLetters = true;
 
 // Highscore logic
 function getHighscoreKey() {
@@ -148,6 +149,13 @@ function initUI() {
     if (soundToggle) {
         soundToggle.addEventListener('change', (e) => {
             isSoundEnabled = e.target.checked;
+        });
+    }
+
+    const lettersToggle = document.getElementById('letters-toggle');
+    if (lettersToggle) {
+        lettersToggle.addEventListener('change', (e) => {
+            showLetters = e.target.checked;
         });
     }
 
@@ -341,7 +349,8 @@ function handleKeyPress(midiNote) {
             combo++;
             createParticles(hitNote.x, hitNote.y, '#eab308');
         } else {
-            score += 10 + (combo * 2);
+            const points = (10 + (combo * 2)) * (!showLetters ? 2 : 1);
+            score += points;
             combo++;
             createParticles(hitNote.x, hitNote.y, hitNote.color);
         }
@@ -384,7 +393,7 @@ function drawStaff(hitZoneX) {
     const lineSpacing = 40;
     const centerY = canvas.height / 2;
     
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.lineWidth = 3;
     
     // Smuiko raktas (Treble)
@@ -414,7 +423,7 @@ function drawStaff(hitZoneX) {
     ctx.stroke();
     
     // Raktai
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.font = 'bold 80px Outfit';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -508,12 +517,12 @@ function gameLoop(time) {
 
         if (note.hand === 'left' && note.type === 'normal') {
             strokeColor = fillColor;
-            fillColor = 'rgba(255, 255, 255, 0.15)';
+            fillColor = 'rgba(0, 0, 0, 0.05)';
         }
 
         // Ledger lines
         if (note.step === 0 || note.step >= 12 || note.step <= -12) {
-            ctx.strokeStyle = '#fff';
+            ctx.strokeStyle = '#000';
             ctx.lineWidth = 4;
             const lineSpacing = 40;
             const centerY = canvas.height / 2;
@@ -543,12 +552,23 @@ function gameLoop(time) {
             ctx.stroke();
         }
         
-        ctx.fillStyle = (note.hand === 'left' && note.type === 'normal') ? strokeColor : '#fff';
-        if (note.type === 'bomb') ctx.fillStyle = '#000';
+        if (note.type === 'bomb') {
+            ctx.fillStyle = '#000';
+        } else if (note.hand === 'left' && note.type === 'normal') {
+            ctx.fillStyle = strokeColor;
+        } else {
+            ctx.fillStyle = '#fff';
+        }
+
         ctx.font = note.type === 'bomb' ? 'bold 20px Outfit' : 'bold 24px Outfit';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(symbol, note.x, note.y);
+        
+        if (note.type === 'normal' && !showLetters) {
+            // Nespausdiname raidės
+        } else {
+            ctx.fillText(symbol, note.x, note.y);
+        }
     });
 
     // Draw particles
