@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Piano Maestro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Start & Settings Screen -->
+        <div id="setup-screen" class="screen active">
+            <div class="setup-container">
+                <h1>Piano Maestro 🎹</h1>
+                <p>Mokykitės groti Casio PX-S1100 (ar bet kuriuo MIDI pianinu)</p>
+                
+                <div class="settings-panel">
+                    <div class="setting-group">
+                        <label>Pasirinkite natas treniruotei:</label>
+                        <div class="notes-selector" id="notes-selector">
+                            <!-- JS will populate these -->
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="speed-slider">Kritimo greitis:</label>
+                        <input type="range" id="speed-slider" min="1" max="10" value="4">
+                    </div>
+
+                    <div class="setting-group">
+                        <label>Žaidimo režimas:</label>
+                        <select id="hand-mode-select" class="styled-select">
+                            <option value="right">Viena ranka (Dešinė)</option>
+                            <option value="both">Dvi rankos</option>
+                        </select>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <div style="flex: 1;">
+                                <label style="font-size: 0.9rem;">Kairės Oktava:</label>
+                                <select id="left-octave-select" class="styled-select">
+                                    <option value="2">2 (Bosas)</option>
+                                    <option value="3" selected>3 (Žema)</option>
+                                    <option value="4">4 (Vidurinė)</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="font-size: 0.9rem;">Dešinės Oktava:</label>
+                                <select id="right-octave-select" class="styled-select">
+                                    <option value="3">3 (Žema)</option>
+                                    <option value="4" selected>4 (Vidurinė)</option>
+                                    <option value="5">5 (Aukšta)</option>
+                                    <option value="6">6 (Aukščiausia)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-box" id="midi-status">
+                    Jungiamasi prie MIDI... ⏳
+                </div>
+
+                <div class="status-box" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); margin-top: -0.5rem;">
+                    Geriausias (<span id="highscore-notes-count">7</span> natų): <strong id="highscore-display">0</strong>
+                </div>
+
+                <button id="start-btn" class="primary-btn" disabled>Pradėti Žaidimą</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="score-display">Taškai: <span id="score">0</span></div>
+                <div class="timer-display" style="font-size: 1.5rem; font-weight: 800; color: #fff;">Laikas: <span id="timer" style="color: #ef4444;">3:00</span></div>
+                <div class="combo-display">Combo: <span id="combo">0</span></div>
+                <button id="stop-btn" class="secondary-btn">Baigti</button>
+            </div>
+            
+            <div class="canvas-container">
+                <canvas id="game-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
