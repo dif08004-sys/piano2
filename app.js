@@ -22,6 +22,7 @@ let wakeLock = null;
 let handMode = 'right'; // 'right' or 'both'
 let leftOctave = 3;
 let rightOctave = 4;
+let isSoundEnabled = true;
 
 // Highscore logic
 function getHighscoreKey() {
@@ -143,6 +144,13 @@ function initUI() {
         });
     }
 
+    const soundToggle = document.getElementById('sound-toggle');
+    if (soundToggle) {
+        soundToggle.addEventListener('change', (e) => {
+            isSoundEnabled = e.target.checked;
+        });
+    }
+
     // Resize canvas
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -208,7 +216,9 @@ function onMIDIMessage(message) {
     // Note On (dažnai velocity = 0 reiškia Note Off)
     if (command >= 144 && command <= 159 && velocity > 0) {
         handleKeyPress(note);
-        playNoteSound(note);
+        if (isSoundEnabled) {
+            playNoteSound(note);
+        }
     }
 }
 
@@ -277,7 +287,7 @@ function spawnNote() {
     const stepDiff = (actualOctave - 4) * 7 + noteIndices[randomNote.name];
     
     const centerY = canvas.height / 2;
-    const lineSpacing = 20;
+    const lineSpacing = 40;
     const yPos = centerY - (stepDiff * (lineSpacing / 2));
 
     const xPos = canvas.width + 50;
@@ -371,11 +381,11 @@ function createParticles(x, y, color) {
 }
 
 function drawStaff(hitZoneX) {
-    const lineSpacing = 20;
+    const lineSpacing = 40;
     const centerY = canvas.height / 2;
     
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.lineWidth = 3;
     
     // Smuiko raktas (Treble)
     [2, 4, 6, 8, 10].forEach(step => {
@@ -405,11 +415,11 @@ function drawStaff(hitZoneX) {
     
     // Raktai
     ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.font = 'bold 40px Outfit';
+    ctx.font = 'bold 80px Outfit';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('𝄞', hitZoneX - 40, centerY - 6 * (lineSpacing / 2));
-    ctx.fillText('𝄢', hitZoneX - 40, centerY + 6 * (lineSpacing / 2));
+    ctx.fillText('𝄞', hitZoneX - 60, centerY - 6 * (lineSpacing / 2));
+    ctx.fillText('𝄢', hitZoneX - 60, centerY + 6 * (lineSpacing / 2));
 }
 
 function gameLoop(time) {
@@ -504,14 +514,14 @@ function gameLoop(time) {
         // Ledger lines
         if (note.step === 0 || note.step >= 12 || note.step <= -12) {
             ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            const lineSpacing = 20;
+            ctx.lineWidth = 4;
+            const lineSpacing = 40;
             const centerY = canvas.height / 2;
             const drawLineAt = (s) => {
                 const ly = centerY - s * (lineSpacing / 2);
                 ctx.beginPath();
-                ctx.moveTo(note.x - 35, ly);
-                ctx.lineTo(note.x + 35, ly);
+                ctx.moveTo(note.x - 50, ly);
+                ctx.lineTo(note.x + 50, ly);
                 ctx.stroke();
             }
             if (note.step === 0) drawLineAt(0);
